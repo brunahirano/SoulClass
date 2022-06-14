@@ -1,0 +1,316 @@
+<!-- sidebar  -->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav="matSidenav">
+
+    <img class="logo mt-4  " src="../assets/img/logobranco.png" />
+
+    <div class="icon-nav ">
+      <ul class="mt-5">
+        <li>
+          <i class='bx bx-group'></i>
+          <span routerLink="/cardsTurmas">Turmas</span>
+        </li>
+        <li>
+          <i class='bx bxs-camera-movie'></i>
+          <span routerLink="/cursos">Cursos</span>
+        </li>
+      </ul>
+    </div>
+    <div class="out-container">
+      <i (click)="logout()" class='bx bx-log-out' role="button"></i>
+    </div>
+  </mat-sidenav>
+  <!-- menu mobile -->
+  <header>
+    <nav>
+      <i mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()" role="button">
+        <mat-icon *ngIf="!sidenav.opened">
+          menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+          close
+        </mat-icon>
+      </i>
+    </nav>
+  </header>
+
+  <!-- Início do conteúdo de Módulos -->
+  <div class="container mt-5">
+    <div class="box-title">
+      <!-- Título dinâmico, trazendo o nome do curso constante no BD, a partir do parametro na URL -->
+      <h2 class="mx-3 titulo">{{ nomeCurso }}</h2>
+      <div class="box-btn mt-2">
+        <!-- Botão de adicionar módulo -- abre Modal que está ao final do HTML -->
+        <button type="button" (click)="open(modalModulo); resetModal()">
+          <i class="bx bx-plus"></i>Adicionar Módulo
+        </button>
+      </div>
+    </div>
+    <!-- Subtítulo da página -->
+    <div class="nav-container">
+      <div class="alinhamento">
+        <h4 class="subtitulo">Módulo</h4>
+      </div>
+    </div>
+
+    <!-- Início da "lista-dropdown" -->
+    <section style="overflow: auto; height: 95vh" class="container tamanhoContainer">
+      <!-- Campos dinâmicos, conforme dados cadastrados no BD -->
+      <mat-accordion *ngFor="let modulo of vetorModulos; index as i" class="example-headers-align" multi>
+        <mat-expansion-panel hideToggle class="mt-3">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ modulo.nome }}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{ modulo.descricao }}
+            </mat-panel-description>
+            <!-- Menu com opções de gerenciamento dos Módulos -->
+            <i class="bx bx-dots-horizontal-rounded font-icone botaoModulo" [matMenuTriggerFor]="menu"></i>
+            <mat-menu #menu="matMenu">
+              <!-- Edição do módulo -- irá abrir Modal que está ao final do HTML -->
+              <button type="button" mat-menu-item (click)="open(modalModulo); preencheEditarModulo(modulo)">
+                <mat-icon>build</mat-icon>
+                <span>Editar Módulo</span>
+              </button>
+              <!-- Exclusão do módulo -- irá abrir Modal que está a seguir -->
+              <button type="button" mat-menu-item (click)="open(modalExcluirModulo)">
+                <mat-icon>delete</mat-icon>
+                <span>Excluir Módulo</span>
+              </button>
+            </mat-menu>
+            <!-- modal de confirmação para excluir módulo -->
+            <ng-template #modalExcluirModulo let-modal>
+              <div class="modal-header">
+                <h4 class="modal-title" id="excluir">Aviso</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Deseja realmente excluir o Módulo {{modulo.nome}}?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn-s" (click)="modal.close('Save click')">Cancelar</button>
+                <button type="button" class="btn-e"
+                  (click)="excluirModulo(modulo);modal.close('Save click')">Excluir</button>
+              </div>
+            </ng-template>
+            <!-- fim do modal de exclusão do módulo -->
+          </mat-expansion-panel-header>
+
+          <!-- Tabela que irá aparecer na expansão da "lista" -->
+          <table class="table table-responsive-md">
+            <!-- Cabeçalho estático -->
+            <thead>
+              <tr>
+                <th>Indice</th>
+                <th>Nome</th>
+                <th>Tipo</th>
+                <th>Data de atualização</th>
+                <th></th>
+                <th>
+                  <button type="button" class="btn-a" title="Adicionar aula"
+                    (click)="open(modalAula); resetModal2(modulo)">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <!-- Corpo da tabela é dinâmico, conforme informações do BD -->
+            <tbody>
+              <tr *ngFor="let aula of modulo.aulas">
+                <td>{{ aula.index }}</td>
+                <td>{{ aula.nome }}</td>
+                <td>{{ aula.tipo }}</td>
+                <td>{{ aula.dataModificacao.toDate() | date: "dd/MM/yyyy" }}</td>
+                <td>
+                  <!-- Botões para gerenciamento das aulas -->
+                  <div class="actions">
+                    <!-- Visualização dos arquivos importados -- irá abrir modal que está um pouco mais abaixo -->
+                    <i class="far fa-eye foldericon" title="Visualizar aula" (click)="openLg(visualizarAula)" role="button"></i>
+                    <!-- Edição da aula -- irá abrir modal que está ao final do HTML -->
+                    <i class="fas fa-edit text-info ml-4" title="Editar aula"
+                      (click)="open(modalAula); preencherModalAula(aula, modulo)" role="button"></i>
+                    <!-- Exclusão da aula -- irá abrir modal que segue -->
+                    <i class="fas fa-trash-alt ml-4" title="Excluir aula" (click)='open(modalExcluirAula)' role="button"></i>
+                  </div>
+
+                  <!-- modal de confirmação para excluir aula -->
+                  <ng-template #modalExcluirAula let-modal>
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="excluir">Aviso</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Deseja realmente excluir a {{aula.nome}}?</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn-s" (click)="modal.close('Save click')">Cancelar</button>
+                      <button type="button" class="btn-e"
+                        (click)="excluirAula(modulo.aulas, aula, modulo);modal.close('Save click')">Excluir</button>
+                    </div>
+                  </ng-template>
+                  <!-- fim do modal de exclusão da aula -->
+
+                  <!-- MODAL DE VISUALIZAÇÃO DO CONTEÚDO -->
+                  <ng-template #visualizarAula let-modal class="modal-vis">
+                    <div class="modal-header">
+                      <h4 class="modal-title" id="modal-basic-title">Conteúdo</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+                      <!-- if para renderização pelo tipo de arquivo -->
+                      <div *ngIf="aula.tipo != '.mp4'; then  pdf  else mp4 ">
+                      </div>
+                      <ng-template #mp4>
+                        <video class="video my-5" src={{aula.link}} frameborder="0" controls width="400px"></video>
+                      </ng-template>
+                      <ng-template #pdf>
+                        <ngx-doc-viewer url="{{aula.link}}" viewer="google"></ngx-doc-viewer>
+                      </ng-template>
+                      <!-- fim do if -->
+
+                    </div>
+                  </ng-template>
+                  <!-- FIM DO MODAL DE VISUALIZAÇÃO DO CONTEÚDO -->
+                </td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </section>
+  </div>
+
+<!-- Abaixo, seguem todos os Modals utilizados na página -->
+
+  <!-- 1. Modal para adicionar/editar os Módulos -->
+  <ng-template #modalModulo let-modal>
+    <div class="modal-header">
+      <!-- O título do modal será dinâmico, podendo ser Criar/Editar, a depender das funções do TS -->
+      <h4 class="modal-title" id="modal-basic-title">{{ botao }} Módulo</h4>
+      <!-- Botão de fechamento do Modal -->
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!-- Corpo do Modal -->
+    <div class="modal-body">
+      <form [formGroup]="form">
+        <!-- Campo 1. Nome do Módulo -->
+        <mat-form-field class="input-group mb-2">
+          <mat-label>Nome do Módulo:</mat-label>
+          <input matInput type="text" placeholder="Digite o nome do módulo" formControlName="nome"  aria-required="true"/>
+        </mat-form-field>
+        <!-- Campo 2. Descrição -->
+        <mat-form-field class="input-group">
+          <mat-label>Descrição do módulo</mat-label>
+          <input matInput type="text" placeholder="Digite a descrição do módulo" formControlName="descricao"  aria-required="true"/>
+        </mat-form-field>
+        <!-- Input do tipo select para o usuário indicar qual a posição será inserido o módulo -->
+        <div *ngIf="!verificacaoKey">
+          <label for="seletor" class="mr-2">Inserir na posição:</label>
+          <select [(ngModel)]="selectedModulo" name="seletor" formControlName="posicao" class="mb-5">
+            <option [ngValue]="-1">Início</option>
+            <!-- O ngValue é o responsável por manter a ordenação das aulas -->
+            <option *ngFor="let item of vetorModulos" [ngValue]="item.index">
+              Após #{{ item.index }} - Módulo: {{ item.nome }}
+            </option>
+            <option [value]="-2">Final</option>
+          </select>
+        </div>
+        <!-- Botões de limpar formulário e envio de dados ao BD -->
+        <div class="text-center mb-3">
+          <button type="reset" class="btn-e mx-3">Limpar</button>
+          <!-- O botão apenas será habilitado se a validação dos campos for verdadeira. Utilizamos tanto o Validators, para validação visual, quanto if/else para validação via back-end -->
+          <button type="button" class="btn-s" (click)="salvarModulo(); modal.dismiss('Cross click')" [disabled]="!form.valid">
+            <!-- Nome do botão dinâmico, assim como o título -->
+            {{ botao }}
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- Fim do Modal 1 -->
+  </ng-template>
+
+  <!-- 2. Modal para de cadastro e edição de conteúdo das aulas-->
+  <ng-template #modalAula let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ botao }} Aula</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <!-- Corpo do Modal -->
+    <div class="modal-body">
+      <form [formGroup]="formAula">
+        <!-- Campo 1. Nome da Aula -->
+        <mat-form-field class="input-group mb-2">
+          <mat-label>Nome da Aula</mat-label>
+          <input matInput type="text" formControlName="nome"  aria-required="true"/>
+        </mat-form-field>
+        <!-- Campo 2. Input do tipo select para escolher o tipo de documento que será importado como conteúdo da Aula -->
+        <select name="seletor" [ngModel]='selected2' formControlName="tipoDocumento" (change)='changeDocumento($event)' aria-required="true">
+          <option [value]="''">Selecione o tipo do documento</option>
+          <option [value]="'.pdf'">.pdf</option>
+          <option [value]="'.mp4'">.mp4</option>
+        </select>
+        <!-- Caso não haja documento importado anteriormente, mostra a imagem default -->
+        <div *ngIf="linkDocumento == '' && nomeAula != '' " class="mt-3">
+          <img src="{{imgDefault}}" alt="Imagem default">
+        </div>
+        <!-- Caso o tipo de documento seja .mp4, habilita a tag para visualização do vídeo escolhido -->
+        <div *ngIf="linkDocumento != '' && tipoDocumento == '.mp4'" class="mt-3">
+          <div class="video">
+            <video class="mx-auto " width="320" height="240" controls>
+              <source src="{{linkDocumento}}" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        <!-- Caso o tipo de documento seja .pdf, habilita a tag para visualização de documento pdf escolhido -->
+        <div *ngIf="linkDocumento != '' && tipoDocumento == '.pdf'" class="mt-3 arquivoPdf">
+          <ngx-doc-viewer [url]="linkDocumento" viewer="google" style="width: 320px; height: 240px;" class="mx-auto" ></ngx-doc-viewer>
+        </div>
+        <!-- Barra de progresso para aguardar o doc ser importado no BD -->
+        <div *ngIf="progresso" class="input-group-text">
+          <mat-progress-bar mode="indeterminate" role="status"></mat-progress-bar>
+        </div>
+        <!-- Input para importação do arquivo -->
+        <input type="file" class="my-2" id="documento" accept="{{tipoDocumento}}" formControlName="linkDocumento"
+          (change)='carregarDocumento($event)' />
+        <!-- Input do tipo select para o usuário indicar qual a posição será inserida a aula -->
+        <div *ngIf="nomeAula == '' ">
+          <label for="seletor1" class="mr-2">Inserir na posição:</label>
+          <select [(ngModel)]="selectedAula" name="seletor1" formControlName="posicao" class="mb-5">
+            <option [value]="-1">Início</option>
+            <!-- O ngValue é o responsável por manter a ordenação das aulas -->
+            <option *ngFor="let item of vetorAulas" [ngValue]="item.index">
+              Após #{{ item.index }} - {{ item.nome }}
+            </option>
+            <option [value]="-2">Final</option>
+          </select>
+        </div>
+        <!-- Botões de limpar formulário e envio de dados ao BD -->
+        <div class="text-center mb-3">
+          <button type="reset" class="btn-e mx-3">Limpar</button>
+          <!-- O botão apenas será habilitado se a validação dos campos for verdadeira. Utilizamos tanto o Validators, para validação visual, quanto if/else para validação via back-end -->
+          <button type="button" class="btn-s" (click)="modal.dismiss('Cross click'); verificaSalvamento()" [disabled]="!formAula.valid">
+            <!-- Nome do botão dinâmico, assim como o título -->
+            {{ botao }}
+          </button>
+        </div>
+      </form>
+    </div>
+  <!-- Fim do Modal 2 -->
+  </ng-template>
+
+  <!-- ****Fim do conteúdo**** -->
+</mat-sidenav-container>
+<!-- ****/sidebar**** -->

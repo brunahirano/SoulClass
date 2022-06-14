@@ -1,0 +1,269 @@
+<!-- sidebar  -->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav="matSidenav">
+
+    <img class="logo mt-4 " src="../assets/img/logobranco.png" />
+
+    <div class="icon-nav ">
+      <ul class="mt-5">
+        <li>
+          <i class='bx bx-group'></i>
+          <span routerLink="/cardsTurmas">Turmas</span>
+        </li>
+        <li>
+          <i class='bx bxs-camera-movie'></i>
+          <span routerLink="/cursos">Cursos</span>
+        </li>
+      </ul>
+    </div>
+    <div class="out-container">
+      <i (click)="logout()" class='bx bx-log-out' role="button"></i>
+    </div>
+  </mat-sidenav>
+  <!-- menu mobile -->
+  <header>
+    <nav>
+      <i mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()" role="button">
+        <mat-icon *ngIf="!sidenav.opened">
+          menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+          close
+        </mat-icon>
+      </i>
+    </nav>
+  </header>
+
+  <!-- ****conteúdo**** -->
+  <!-- INFORMAÇÕES DOS ALUNOS -->
+  <div class="container mt-3">
+    <div class="nav-container">
+      <div class="mt-4 alinhamento">
+        <h3 class="titulo">Turma {{nomeTurma}}</h3>
+        <h4 class="subtitulo my-4">Alunos</h4>
+      </div>
+      <!--Menu lateral com mat-menu-->
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Botão para abrir menu dropdown" class="mt-4">
+        <mat-icon class="icon-menu-alunos">more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <!--Botão que abre o modal de cadastro e edição de aluno -->
+        <button type="button" mat-menu-item (click)="open(ModalAluno);cadastrar()" title="Novo cadastro">
+          <span>
+            <mat-icon>person_add</mat-icon>Novo Cadastro
+          </span>
+        </button>
+        <!--Botão que abre o modal de import de CSV -->
+        <button type="button" mat-menu-item (click)="open(modalCSV)" title="Importar CSV">
+          <span>
+            <mat-icon>note_add</mat-icon>Importar CSV
+          </span>
+        </button>
+        <!--Botão que abre o modal de confimação de excluir todos da turma -->
+        <button type="button" mat-menu-item (click)="open(modalExcluirTodos)" title="Deletar todos">
+          <span>
+            <mat-icon>delete</mat-icon>Deletar todos
+          </span>
+        </button>
+      </mat-menu>
+    </div>
+    <!--TABELA COM AS INFORMAÇÕES DOS ALUNOS-->
+    <section style="overflow-x:auto;" class="table-container container tamanhoContainer mat-elevation-z1 p-0">
+      <table mat-table [dataSource]="tabelaAlunos">
+        <!-- Coluna Nome -->
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let aluno"> {{aluno.nome}} </td>
+        </ng-container>
+
+        <!-- Coluna e-mail -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef> <span class="mx-5">Email </span></th>
+          <td mat-cell *matCellDef="let aluno"> <span class="mx-5">{{aluno.email}}</span> </td>
+        </ng-container>
+        <!--Coluna ações-->
+        <ng-container matColumnDef="key" class="p-0">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell class="p-0 " *matCellDef="let aluno">
+            <div class="actions">
+              <!--Ícone de lápis para chamar o modal para editar o aluno-->
+              <i (click)="open(ModalAluno); editar(aluno)" class="fas fa-edit text-info" title="Editar"></i>
+              <!--Ícone de lixeira para chamar o modal para excluir o aluno-->
+              <i (click)="open(modalExcluirAluno);" class="fas fa-trash-alt ml-4" title="Excluir"></i>
+            </div>
+
+            <!--Modal de confirmação para excluir aluno-->
+            <ng-template #modalExcluirAluno let-modal>
+              <div class="modal-header">
+                <h4 class="modal-title" id="excluir">Aviso</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Deseja realmente excluir o(a) aluno(a) {{aluno.nome}}?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn-s" (click)="modal.close('Save click')">Cancelar</button>
+                <button type="button" class="btn-e" (click)="excluir(aluno);modal.close('Save click')">Excluir</button>
+              </div>
+            </ng-template>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <!--Paginação da tabela, utilizando o mat-paginator-->
+      <mat-paginator #paginatorAluno [ngStyle]="{display: bpPaginator ? 'block' : 'none'}" [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+    </section>
+
+    <!-- INFORMAÇÕES DOS CURSOS -->
+    <div class="nav-container">
+      <div class="my-4 alinhamento">
+        <h4 class="subtitulo">Cursos</h4>
+      </div>
+      <div class="box-btn mt-3">
+        <!--Botão para chamar o modal para adicionar curso-->
+        <button type="button" (click)="open(modalAdicionarCurso)"><i class='bx bx-plus'></i>Adicionar Curso</button>
+      </div>
+    </div>
+
+    <!--TABELA COM INFORMAÇÕES DOS CURSOS DA TURMA-->
+    <section style="overflow: auto" class="table-container container tamanhoContainer mat-elevation-z1 p-0 mb-3">
+      <table mat-table [dataSource]="tabelaCursos">
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let curso"> {{curso.nome}} </td>
+        </ng-container>
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef> <span class="ml-5">Descrição</span> </th>
+          <td mat-cell *matCellDef="let curso" class="descricao"> <span class="ml-5">{{curso.descricao}}</span> </td>
+        </ng-container>
+        <ng-container matColumnDef="key">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let curso">
+            <div class="action-cursos">
+              <!--Ícone de lixeira para chamar o modal para excluir o curso na turma-->
+              <i class="fas fa-trash-alt mx-5 mt-1" title="Excluir" (click)="open(modalExcluirCursoTurma)"></i>
+              <!--Ícone com uma seta para mostrar o conteúdo do curso-->
+              <span class="navegarCurso" (click)="mostrarCursoTurma(curso.key)">
+                <span class="text-mobile">Ir para o curso </span> <i class="fas fa-angle-double-right"
+                  title="Ir para o curso"></i>
+              </span>
+
+              <!--Modal de confirmação para excluir curso da turma -->
+              <ng-template #modalExcluirCursoTurma let-modal>
+                <div class="modal-header">
+                  <h4 class="modal-title" id="excluir">Aviso</h4>
+                  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Deseja realmente excluir o {{curso.nome}}?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn-s" (click)="modal.close('Save click')">Cancelar</button>
+                  <button type="button" class="btn-e"
+                    (click)="deletarCursos(curso); modal.close('Save click')">Excluir</button>
+                </div>
+              </ng-template>
+              <!-- Fim do modal -->
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+      </table>
+      <!--Paginação da tabela cursos-->
+      <mat-paginator #paginatorCurso [ngStyle]="{display: bpPaginator ? 'block' : 'none'}" [pageSizeOptions]="[5, 8, 10]" showFirstLastButtons></mat-paginator>
+    </section>
+
+    <!--Modal de confimação de exclusão de todos os alunos-->
+    <ng-template #modalExcluirTodos let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="excluir">Aviso</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Deseja realmente excluir todos os alunos da Turma?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-s" (click)="modal.close('Save click')">Cancelar</button>
+        <button type="button" class="btn-e" (click)="excluirAlunosTurma();modal.close('Save click')">Excluir</button>
+      </div>
+    </ng-template>
+
+    <!--Modal para importar CSV de alunos -->
+    <ng-template #modalCSV let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Importar CSV</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <a class="btn-csv m-2"
+          href="https://firebasestorage.googleapis.com/v0/b/soulclass-da785.appspot.com/o/ModeloCadastroAluno.csv?alt=media&token=d77c71cc-cb20-4582-b088-971c8644855c">Baixar
+          Modelo CSV</a>
+        <input type="file" id="foto" (change)="fileChangeListener($event);modal.dismiss('Cross click')">
+      </div>
+    </ng-template>
+
+    <!--Modal cadastrar e editar alunos da turma -->
+    <ng-template #ModalAluno let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{botao}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="form">
+          <mat-form-field class="input-group mb-2">
+            <mat-label>Nome Completo do Aluno:</mat-label>
+            <input matInput type="text" formControlName="nome" aria-required="true">
+          </mat-form-field>
+          <mat-form-field class="input-group">
+            <mat-label>E-mail do Aluno:</mat-label>
+            <input matInput type="email" placeholder="aluno@email.com" formControlName="email" aria-required="true">
+          </mat-form-field>
+          <!-- ******************** -->
+          <div class="text-center mb-3">
+            <button type="reset" class="btn-e mx-3">Limpar</button>
+            <button type="button" class="btn-s" (click)="salvarAluno(); modal.dismiss('Cross click')"
+              [disabled]="!form.valid">{{botao}}</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+
+    <!--Modal adicionar cursos na turma -->
+    <ng-template #modalAdicionarCurso let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Adicionar Curso</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formAddCurso">
+          <select class="sel-curso form-select form-select-md mb-4 w-50" (change)='cursoSelecionado($event)'>
+            <option value="" disabled selected>Selecione um curso</option>
+            <option *ngFor="let curso of cursos" value="{{curso.key}}">{{curso.nome}}</option>
+          </select>
+          <div class="text-center mb-3">
+            <button type="reset" class=" btn-e mx-3 shadow-none">Limpar</button>
+            <button type="button" class="btn-s shadow-none" (click)="modal.dismiss('Cross click'); addCursoTurma()">Adicionar</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
+  </div>
+
+
+  <!-- ****/conteúdo**** -->
+</mat-sidenav-container>
+<!-- ****/sidebar**** -->

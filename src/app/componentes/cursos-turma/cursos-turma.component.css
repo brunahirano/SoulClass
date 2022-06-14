@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400, 0;600;0,700;1,200&display=swap');
+
+/* Botão de adicionar módulo e teste */
+
+  .box-btn {
+    margin-right: 3%;
+  }
+
+/**/
+
+@media(max-width:430px){
+  input {
+    zoom: 80%
+  }
+  mat-accordion {
+    zoom: 80%
+  }
+
+}
+
+@media(max-width: 330px) {
+  input[type="file"] {
+    zoom: 70%;
+    margin-left: -15px
+  }
+  ngx-doc-viewer {
+    zoom: 85%
+  }
+  mat-accordion {
+    zoom: 70%
+  }
+}

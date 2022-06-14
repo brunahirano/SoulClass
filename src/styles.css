@@ -1,0 +1,441 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400, 0;600;0,700;1,200&display=swap');
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif
+}
+
+/* cor das mensagems de confimação do crud */
+.cor-mensagem {
+  background-color: aliceblue;
+  color: black;
+}
+
+/* SIDENAV */
+
+  mat-sidenav {
+    width: 280px;
+    height: 100vh;
+    border-right: none;
+    padding: 16px;
+    text-align: center;
+
+  }
+
+  mat-sidenav-container {
+    height: 100vh;
+  }
+
+  .menu-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 1rem;
+  }
+
+  mat-icon {
+    margin-right: 8px;
+  }
+
+  .logo {
+    width: 200px;
+    filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.084)) drop-shadow(0px 20px 3px rgba(0, 0, 0, 0.168));
+  }
+
+
+  .icon-nav {
+    margin-top: 25px;
+    text-align: left;
+    padding: 10px;
+  }
+
+  .icon-nav ul {
+    list-style: none;
+  }
+
+  .icon-nav ul li {
+    padding: 15px;
+    font-size: 20px;
+  }
+
+  .icon-nav span {
+    margin-left: 8px;
+  }
+
+  .out-container {
+    position: fixed;
+    width: 250px;
+    font-size: 25px;
+    bottom: 50px;
+  }
+
+  /* header profile */
+  header {
+    display: flex;
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .container-profile {
+    width: 100%;
+    display: flex;
+    gap: 20px;
+    justify-content: end;
+  }
+
+  .profile {
+    /* background-color: darkblue; */
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+
+  .profile i {
+    margin-right: 5px;
+    font-size: 50px;
+    color: darkgray;
+  }
+
+  .text-header {
+    margin-top: 10px;
+    font-size: 20px;
+  }
+  .text-header i {
+    margin-right: 5px;
+
+  }
+
+  .icon-nav i {
+    font-size: 28px;
+    margin-right: 8px;
+    transition: 300ms;
+  }
+  .icon-nav i:hover {
+    font-size: 35px;
+
+  }
+
+/**/
+
+
+/* Ajustando tema do material para cores claras */
+.mat-drawer-container {
+  background: rgb(248, 248, 248);
+  color: #000000;
+}
+
+.mat-drawer {
+  background: #3cb4c4;
+  color: white;
+}
+
+.icon-nav span {
+  cursor: pointer;
+  transition: 300ms;
+}
+
+.icon-nav span:hover {
+  font-weight: 600;
+  font-size: 23px;
+
+}
+
+.out-container i {
+  cursor: pointer;
+  font-size: 28px;
+  transition: 300ms;
+}
+.out-container i:hover {
+  font-size: 35px;
+  font-weight: 600;
+}
+
+
+/* Modal de confirmação de exclusão */
+
+  .btn-s {
+    border: none;
+    background-color: #F8C100;
+    padding: 8px;
+    color: #ffffff;
+    border-radius: 3px;
+  }
+
+  .btn-e {
+    border: none;
+    background-color: #9c9c9c;
+    padding: 8px;
+    color: #ffffff;
+    border-radius: 3px;
+  }
+
+  .modal-title{
+    width: 100%;
+    color: #3cb4c4;
+   text-align: center;
+  }
+
+  .modal-body {
+    text-align: center;
+  }
+
+  .modal-body p {
+    margin-top: 3%
+  }
+
+  #excluir {
+    font-weight: 600;
+  }
+
+  .modal-header {
+    align-items: center;
+  }
+
+  .button-modal {
+    border: none;
+    padding: 8px;
+    border-radius: 3px;
+    background-color: #F8C100;
+    color: #ffffff;
+  }
+
+  .btn-s:disabled {
+    background-color: #fad75a;
+  }
+
+/**/
+
+/* Cards dos cursos e turmas
+Aplicável para CardsTurmasComponent e CursosComponent */
+
+  mat-card-title {
+    color: black;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  mat-card {
+    background-color: #fff;
+    color: #919191 !important;
+    height: 22rem;
+    width: 85%;
+  }
+
+  mat-card-header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  img.mat-card-image  {
+    width: 90%;
+    height: 190px;
+    margin: 5%;
+  }
+
+  .font-icone {
+    font-size: 30px;
+    color: black;
+  }
+
+/**/
+
+/* Botões de Adicionar
+Aplicável para CardsTurmasComponent, CursosComponent, CursosTurmaComponent, ModulosComponent e TesteComponent */
+
+  .box-btn {
+    text-align: end;
+    margin-right: 6%;
+    padding: 10px;
+  }
+
+  .box-btn button {
+    border: none;
+    padding: 8px;
+    border-radius: 3px;
+    background-color: #F8C100;
+    color: #ffffff;
+  }
+
+  .box-btn button:hover {
+    -webkit-transform: scale3d(1.05, 1.05, 1.05);
+    transform: scale3d(1.05, 1.05, 1.05)
+  }
+
+/**/
+
+/* Estilização dos input-file */
+
+  /* Aparência que terá o seletor de arquivo */
+  input[type="file"]::file-selector-button {
+    background-color: #21a7d0;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    margin: 10px;
+    padding: 6px 20px;
+    border: none;
+  }
+
+/**/
+
+/* Estilizações gerais das páginas */
+
+  p {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  h2 {
+    font-weight: 600;
+    color: #3cb4c4;
+  }
+
+  .alinhamento {
+    margin-left: 4%
+  }
+
+  i {
+    cursor: pointer;
+  }
+
+  .fotopadrao {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .imagem-modal {
+    max-width: 250px;
+    max-height: 250px;
+  }
+
+
+/**/
+
+/* Títulos das páginas
+Aplicável para ConteudoTurmaComponent, CursosTurmaComponent, TesteComponent e ModulosComponent */
+
+  .titulo {
+    font-weight: 600;
+    color: #3cb4c4;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .subtitulo {
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif;
+    color: #000
+  }
+
+/**/
+
+/* Tabelas com informações
+Aplicáveis aos componentes ConteudoTurmaComponent, CursosTurmaComponent e ModulosComponent */
+
+  .fa-trash-alt {
+    color: darkslategray
+  }
+
+  table {
+    font-family: "Poppins", sans-serif;
+    width: 100%;
+  }
+
+  .btn-a {
+    border: none;
+    background-color: #F8C100;
+    /* padding: 8px; */
+    color: #ffffff;
+    border-radius: 3px;
+  }
+
+  .foldericon {
+    font-size: 18px
+  }
+
+  .icon-menu-alunos {
+    font-size: 40px;
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .actions {
+    display: flex;
+  }
+
+  .action-cursos {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+  }
+
+  .tamanhoContainer {
+    width: 95%;
+  }
+
+/**/
+
+/* Visualização das aulas em pdf e mp4
+Aplicável aos componentes CursosTurmaComponent e ModulosComponent */
+
+  .video{
+    width: 100%;
+    text-align: center;
+  }
+
+  ngx-doc-viewer{
+    height: 100%;
+    text-align: center;
+  }
+
+  .arquivoPdf {
+    width: 100%;
+  }
+
+/**/
+
+/* Input select para posição de aulas/módulos
+Aplicável aos componentes CursosTurmaComponent e ModulosComponent */
+
+  select {
+    -moz-appearance: none;
+    /* -webkit-appearance: none;
+    appearance: none; */
+    position: relative;
+    width: 100%;
+    padding: 10px 0;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    border-bottom: 1px solid ;
+    background-repeat: no-repeat;
+    background-position-x: calc(100% - (10px));
+    background-position-y: center;
+    border-bottom: 1.5px solid darkgray;
+  }
+
+  select:focus {
+    background: transparent;
+  }
+
+/**/
+
+/* Botão de menu dropdown
+Aplicáveis aos componentes TesteComponent, CursosTurmaComponent e ModulosComponent */
+
+  .botaoModulo {
+    border: none;
+    color: #3cb4c4;
+    background-color: transparent;
+    font-size: 25px;
+  }
+
+/**/

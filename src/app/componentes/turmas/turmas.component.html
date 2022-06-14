@@ -1,0 +1,37 @@
+<!-- Título do dialog utilizado na criação de Turmas -- o Dialog é chamado através do componente CardsTurmasComponent -->
+<h2 mat-dialog-title>Criar turma</h2>
+<!-- Início do conteúdo -->
+<mat-dialog-content class="container">
+  <!-- Formulário para inserção de dados para criar nova Turma -->
+  <form [formGroup]="form">
+    <!-- Campo 1. Nome - campo obrigatório -->
+    <mat-form-field class="input-group mb-1">
+      <mat-label>Nome da turma</mat-label>
+      <input matInput type="text" formControlName="nome" aria-required="true">
+    </mat-form-field>
+    <!-- Campo 2. Descrição - campo obrigatório -->
+    <mat-form-field class="input-group mb-2">
+      <mat-label>Descrição da turma</mat-label>
+      <input matInput type="text" formControlName="descricao" aria-required="true">
+    </mat-form-field>
+    <!-- Campo 3. Foto -->
+    <div class="fotopadrao">
+      <img src="{{urlImagem}}" alt="Imagem default" class=" imagem-modal">
+    </div>
+    <!-- Barra de progresso para aguardar carregamento da foto no BD -->
+    <div *ngIf=progresso class="input-group-text">
+      <mat-progress-bar mode="indeterminate" role="status"></mat-progress-bar>
+    </div>
+    <!-- Campo 4. Input do tipo arquivo para inserção da foto -->
+    <input type="file" id="foto" formControlName="foto" (change)="carregarImagem($event)" class="mb-3">
+    <!-- Botões de limpar formulário e envio de dados ao BD -->
+    <div class="text-right">
+      <button type="reset" class="btn-e mx-3">Limpar</button>
+      <!-- O botão apenas será habilitado se a validação dos campos for verdadeira. Utilizamos tanto o Validators, para validação visual, quanto if/else para validação via back-end -->
+      <button type="button" class="btn-s mt-3" (click)='criarTurma()' [disabled]="!form.valid">Criar turma</button>
+    </div>
+    <!-- Final da seção de Botões -->
+  </form>
+  <!-- Fechamento do formulário -->
+</mat-dialog-content>
+<!-- Final do conteúdo -->

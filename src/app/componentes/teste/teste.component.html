@@ -1,0 +1,298 @@
+<!-- Página de teste que será renderizada no componente CursosTurmaComponent -->
+
+<!-- Cabeçalho da página -->
+<div class="box-title">
+  <div class="box-btn mt-2">
+    <!-- Botão para abrir Modal de adição de novo teste que está ao final do HTML -->
+    <button type="button" (click)="open(modalTeste);resetModal()">
+      <i class="bx bx-plus"></i>Adicionar Teste
+    </button>
+    <!-- Fim do botão -->
+  </div>
+  <!-- Título da página -->
+  <div class="alinhamento">
+    <h4 class="subtitulo">Testes</h4>
+  </div>
+  <!-- Fim do título -->
+</div>
+<!-- Fim do cabeçalho -->
+
+<!-- Seção onde serão renderizados os testes criados -->
+<section style="overflow: auto;" class="container tamanhoContainer">
+  <!-- Início da "lista-dropdown" -->
+  <mat-accordion *ngFor="let teste of vetorTeste; index as i" class="example-headers-align" multi>
+    <mat-expansion-panel hideToggle class="my-4">
+      <!-- Cabeçalho da "lista-dropdown" -->
+      <mat-expansion-panel-header>
+        <!-- Campo 1. Título -- conteúdo será dinâmico, trazendo informações do BD -->
+        <mat-panel-title>
+          {{ teste.titulo }}
+        </mat-panel-title>
+        <!-- Campo 2. Descrição -- conteúdo será dinâmico, trazendo informações do BD -->
+        <mat-panel-description>
+          {{ teste.descricao }}
+        </mat-panel-description>
+        <!-- Menu dropdown que aparece na lateral direita da "lista" -->
+        <i class="bx bx-dots-horizontal-rounded font-icone botaoModulo" [matMenuTriggerFor]="menu" role="button"></i>
+        <!-- Itens do menu -->
+        <mat-menu #menu="matMenu">
+          <!-- Item 1. Adicionar questão -- irá abrir Modal que está ao final do HTML -->
+          <button type="button" mat-menu-item (click)="openLg(modalQuestao, teste.id); resetModal()">
+            <mat-icon>add</mat-icon>
+            <span>Adicionar questão</span>
+          </button>
+          <!-- Item 2. Importar CSV -- irá abrir Modal que está ao final do HTML -->
+          <button type="button" mat-menu-item (click)="open(modalCSV, teste.id)">
+              <span>
+                <mat-icon>note_add</mat-icon>Importar CSV
+              </span>
+            </button>
+          <!-- Item 3. Edição do teste -- irá abrir Modal que está ao final do HTML -->
+          <button type="button" mat-menu-item (click)="open(modalTeste); preencheEditarTeste(teste)">
+            <mat-icon>build</mat-icon>
+            <span>Editar Teste</span>
+          </button>
+          <!-- Item 4. Exclusão do teste -- irá abrir Modal de confirmação que segue depois -->
+          <button type="button" mat-menu-item (click)="open(modalExcluirTeste)">
+            <mat-icon>delete</mat-icon>
+            <span>Excluir Teste</span>
+          </button>
+          <!-- Modal de confirmação para excluir teste (cf item 4) -->
+          <ng-template #modalExcluirTeste let-modal>
+            <div class="modal-header">
+              <h4 class="modal-title" id="excluir">Aviso</h4>
+              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Deseja realmente excluir o {{teste.titulo}}?</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn-s" (click)="modal.close('Save click')">Cancelar</button>
+              <button type="button" class="btn-e"
+                (click)="excluirTeste(teste.id);modal.close('Save click')">Excluir</button>
+            </div>
+          </ng-template>
+          <!-- Fim do modal de exclusão da teste -->
+        </mat-menu>
+        <!-- Final dos itens do menu -->
+      </mat-expansion-panel-header>
+      <!-- Final do Menu Dropdown -->
+
+      <!-- Início da tabela que aparecerá com a expansão da "lista-dropdown" -->
+      <table class="table table-responsive-md">
+        <!-- Cabeçalho da tabela com dados estáticos -->
+        <thead>
+          <tr>
+            <th>Questão</th>
+            <th>Resposta correta</th>
+            <th>Tipo de questão</th>
+            <th></th>
+          </tr>
+        </thead>
+        <!-- Fim do cabeçalho -->
+
+        <!-- Conteúdo da tabela com dados dinâmicos -->
+        <tbody>
+          <!-- Com o ngFor, trazemos os dados constantes no BD, após cadastro das Questões -->
+          <tr *ngFor='let questao of teste.questoes'>
+            <!-- Campo 1. Título da questão -->
+            <td>{{questao.titulo}}</td>
+            <!-- Campo 2. Resposta indicada como correta pelo professor/adm -->
+            <td>{{questao.resposta}}</td>
+            <!-- Campo 3. Tipo da questão criada: múltipla escolha ou verdadeiro/falso -->
+            <td>{{questao.tipo}}</td>
+            <!-- Campo 4. Botões de edição e exclusão -->
+            <td>
+              <!-- Botão de edição dos dados da questão -- irá abrir Modal que está ao final do HTML -->
+              <i class="fas fa-edit text-info ml-4" title="Editar questão"
+                (click)='openLg(modalQuestao, teste.id); preencherQuestao(questao, teste.id)' role="button"></i>
+              <!-- Botão de exclusão da questão -- irá abrir Modal de confirmação que segue depois -->
+              <i class="fas fa-trash-alt ml-4" title="Excluir questão" (click)="open(modalExcluirQuestao)" role="button"></i>
+            </td>
+            <!-- Modal de confirmação para excluir questão-->
+            <ng-template #modalExcluirQuestao let-modal>
+              <div class="modal-header">
+                <h4 class="modal-title" id="excluir">Aviso</h4>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Deseja realmente excluir a questão {{questao.titulo}}?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn-s" (click)="modal.close('Save click')">Cancelar</button>
+                <button type="button" class="btn-e"
+                  (click)="excluirQuestao(questao.idQuestao, teste.id);modal.close('Save click')">Excluir</button>
+              </div>
+            </ng-template>
+            <!-- Fim do modal de exclusão da teste -->
+          </tr>
+          <!-- Fim do conteúdo da tabela -->
+        </tbody>
+        <!-- Fim da tabela -->
+      </table>
+      <!-- Fim da "lista-dropdown" -->
+    </mat-expansion-panel>
+  </mat-accordion>
+  <!-- Fim da seção de testes -->
+</section>
+
+<!-- Abaixo, seguem todos os Modals utilizados na página -->
+
+<!-- 1. Modal para adicionar/editar os Testes -->
+<ng-template #modalTeste let-modal>
+  <div class="modal-header">
+    <!-- O título do modal será dinâmico, podendo ser Criar/Editar, a depender das funções do TS -->
+    <h4 class="modal-title">{{botao}} teste</h4>
+    <!-- Botão de fechamento do Modal -->
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!-- Corpo do Modal -->
+  <div class="modal-body">
+    <!-- Formulário para imputar os dados de criação ou trazer os dados para edição -->
+    <form [formGroup]="formTeste">
+      <div>
+        <!-- Campo 1. Título do Teste -->
+        <mat-form-field class="input-group mb-2">
+          <mat-label>Título do Quiz:</mat-label>
+          <input matInput type="text" placeholder="Digite o título do Quiz" formControlName="titulo" aria-required="true">
+        </mat-form-field>
+        <!-- Campo 2. Descrição -->
+        <mat-form-field class="input-group">
+          <mat-label>Descrição:</mat-label>
+          <input matInput type="text" placeholder="Digite descricao do Quiz" formControlName="descricao" aria-required="true">
+        </mat-form-field>
+        <!-- Campo 3. Nº tentativas pelo aluno -->
+        <mat-form-field class="input-group mb-2">
+          <mat-label>Número de tentativas:</mat-label>
+          <input matInput type="number" placeholder="Digite o números de tentativas" formControlName="tentativa" aria-required="true">
+        </mat-form-field>
+        <!-- Campo 4. Percentual de acerto necessário para aprovação do aluno -->
+        <mat-form-field class="input-group mb-2">
+          <mat-label>Percentual de acerto:</mat-label>
+          <input matInput type="number" placeholder="Digite o números de tentativas" formControlName="acerto" aria-required="true">
+        </mat-form-field>
+      </div>
+      <!-- Botões de limpar formulário e envio de dados ao BD -->
+      <div class="modal-footer">
+        <button type="reset" class="btn-e btn mx-3">Limpar</button>
+        <!-- O botão apenas será habilitado se a validação dos campos for verdadeira. Utilizamos tanto o Validators, para validação visual, quanto if/else para validação via back-end -->
+        <button type="button" (click)="salvaTeste();modal.dismiss('Cross click')" class="btn-s ml-2"
+          [disabled]="!formTeste.valid">{{botao}}</button>
+      </div>
+      <!-- Final do formulário -->
+    </form>
+  </div>
+  <!-- Fim do Modal 1 -->
+</ng-template>
+
+
+<!-- 2. Modal para exportação e importação de arquivos CSV -->
+<ng-template #modalCSV let-modal>
+  <div class="modal-header">
+    <!-- Importação de arquivo CSV com as questões a serem cadastradas no BD -->
+    <h4 class="modal-title" id="modal-basic-title">Importar CSV</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- Exportação de arquivo CSV modelo para uso do professor/adm -->
+    <a class="btn-csv m-2"
+    href="https://firebasestorage.googleapis.com/v0/b/soulclass-da785.appspot.com/o/ModeloQuestoesTeste.csv?alt=media&token=c3b2e6b0-67bb-4f6d-9d08-ef56367b3fd3">Baixar
+    Modelo CSV</a>
+    <input type="file" id="foto" (change)="readFileCSV($event); modal.dismiss('Cross click')">
+  </div>
+  <!-- Fim do Modal 2 -->
+</ng-template>
+
+<!-- 1. Modal para adicionar/editar as Questões -->
+<ng-template #modalQuestao let-modal>
+  <div class="modal-header">
+    <!-- O título do modal será dinâmico, podendo ser Criar/Editar, a depender das funções do TS -->
+    <h4 class="modal-title">{{botao}} questão</h4>
+    <!-- Botão de fechamento do Modal -->
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <!-- Input do tipo select para selecionar o tipo de questão que será criada ou editada. -->
+  <select class="sel-curso form-select form-select-md my-4 w-50" (change)="mostrarFormQuestao($event); mostrarForm()">
+    <option value="" disabled [selected]="aparecer == undefined">Selecione o tipo de questão</option>
+    <option value="verdadeira-falsa" [selected]="aparecer == 'verdadeira-falsa' ">Verdadeira e falsa</option>
+    <option value="multipla-escolha" [selected]="aparecer == 'multipla-escolha' ">Múltipla escolha</option>
+  </select>
+
+  <!--Formulário para criar questão-->
+  <div class="modal-body p-5">
+    <div *ngIf="estaVisivel" [formGroup]='formQuestoes'>
+      <!-- Campo 1. Enunciado -->
+      <mat-form-field class="input-group mb-2">
+        <mat-label class="fw-bold">Enunciado questão</mat-label>
+        <div class="d-flex">
+          <input matInput type="text" placeholder="Digite o nome do módulo" formControlName='titulo'>
+        </div>
+      </mat-form-field>
+      <!-- Campo 2. Primeira alternativa - sempre habilitada -->
+      <mat-form-field class="input-group mb-2">
+        <mat-label>A</mat-label>
+        <div class="d-flex">
+          <input matInput type="text" placeholder="Digite o nome do módulo" formControlName='opcao1'>
+          <!-- Botão para escolher caso a alternativa seja correta -->
+          <button type="button" class="btn btn-e" value='{{formQuestoes.value.opcao1}}'
+            [class.cor]="resposta ==  formQuestoes.value.opcao1 && resposta != '' "
+            (click)='opcaoCorreta($event)'>Correta</button>
+        </div>
+      </mat-form-field>
+      <!-- Campo 3. Segunda alternativa - sempre habilitada -->
+      <mat-form-field class="input-group mb-2">
+        <mat-label>B</mat-label>
+        <div class="d-flex">
+          <input matInput type="text" placeholder="Digite o nome do módulo" formControlName='opcao2'>
+          <!-- Botão para escolher caso a alternativa seja correta -->
+          <button type="button" class="btn btn-e" value='{{formQuestoes.value.opcao2}}'
+            [class.cor]='resposta ==  formQuestoes.value.opcao2' (click)='opcaoCorreta($event)'>Correta</button>
+        </div>
+      </mat-form-field>
+      <!--  A depender do tipo, habilitará um nº de campos específicos no form a serem preenchidos. -->
+      <div *ngIf="aparecer !== 'verdadeira-falsa'">
+        <!-- Campo 4. Terceira alternativa - habilitado apenas para questões tipo múltipla escolha -->
+        <mat-form-field class="input-group mb-2">
+          <mat-label>C</mat-label>
+          <div class="d-flex">
+            <input matInput type="text" placeholder="Digite o nome do módulo" formControlName='opcao3'>
+            <!-- Botão para escolher caso a alternativa seja correta -->
+            <button type="button" class="btn btn-e" value='{{formQuestoes.value.opcao3}}'
+              [class.cor]='resposta ==  formQuestoes.value.opcao3' (click)='opcaoCorreta($event)'>Correta</button>
+          </div>
+        </mat-form-field>
+        <mat-form-field class="input-group mb-2">
+        <!-- Campo 5. Quarta alternativa - habilitado apenas para questões tipo múltipla escolha -->
+          <mat-label>D</mat-label>
+          <div class="d-flex">
+            <input matInput type="text" placeholder="Digite o nome do módulo" formControlName='opcao4'>
+            <!-- Botão para escolher caso a alternativa seja correta -->
+            <button type="button" class="btn btn-e" value='{{formQuestoes.value.opcao4}}'
+              [class.cor]='resposta ==  formQuestoes.value.opcao4' (click)='opcaoCorreta($event)'>Correta</button>
+          </div>
+        </mat-form-field>
+      </div>
+      <!-- Botões de limpar formulário e envio de dados ao BD -->
+      <div class="modal-footer">
+        <div class="btn-t">
+          <button type="reset" class="btn-e btn mx-3">Limpar</button>
+          <!-- O botão apenas será habilitado se a validação dos campos for verdadeira. Utilizamos tanto o Validators, para validação visual, quanto if/else para validação via back-end -->
+          <button type="button" class="btn-s ml-2" (click)="salvarQuestao() ;modal.dismiss('Cross click')">{{botao}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Fim do Modal 3 -->
+</ng-template>
+<!-- Div vazia apenas para dar um espaçamento ao final da página -->
+<div class="m-b"></div>

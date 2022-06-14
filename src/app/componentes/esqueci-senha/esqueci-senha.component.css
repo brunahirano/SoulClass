@@ -1,0 +1,148 @@
+.container{
+  border: 0px solid black;
+  max-width: 1200px;
+  margin: 150px auto 0px;
+  display: grid;
+  grid-template-areas:
+  "item form";
+  padding: 20px;
+}
+.form{
+  max-width: 500px;
+  min-width: 300px;
+  background-color: #ffff;
+  height: 300px;
+
+}
+.form{
+  margin-top: 80px;
+}
+.form input{
+  width: 345.98px;
+  height: 54.73px;
+  margin-left: 80px;
+  margin-top: 48px;
+}
+.form button{
+  margin-top: 60px;
+  margin-left: 80px;
+  height: 54.73px;
+  width: 345.98px;
+  background-color: #21a7d0;
+  color: #F2F2F2;
+  grid-area: "form";
+}
+
+.item{
+  max-width: 600px;
+  min-width: 300px;
+  height: 350px;
+  grid-area: "item";
+
+}
+.item img{
+  margin-top: 50px;
+}
+.item h1{
+  margin-top: 30px;
+  font-size: 4rem;
+}
+.item h4{
+  margin-top: 15px;
+}
+.item p{
+  margin-top: 50px;
+  color: var(--yellow);
+}
+/* Modal */
+.minhaModal{
+  width: 300px;
+  height: 150px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #dde1e7;
+  box-shadow:  -3px -3px 7px #ffffff73, 3px 3px 5px rgba(94, 104, 121, .288);
+
+}
+.tituloModal{
+  background-color: var(--yellow);
+  color: white;
+}
+.buttons button{
+  background-color: var(--blue);
+  color: #dde1e7;
+  border: none;
+  border-radius: 15px;
+  height: 40px;
+  width: 100px;
+}
+.buttons .cancela{
+  background-color: var(--blue);
+  color: var(--white);
+  width:70px;
+  margin-left:7rem;
+  font-size: 14px;
+}
+p {
+  cursor: pointer;
+}
+
+.validarEmail{
+  margin-left:80px;
+}
+/* Responsividade */
+@media only screen and (max-width: 1220px){
+  .form input, .form button{
+    width: 245.98px;
+    margin-left: 80px;
+  }
+  .form{
+    margin-right: 50px;
+    width: 400px !important;
+  }
+}
+@media only screen and (min-width: 1020px) {
+  .form {
+    margin-right: 0px;
+  }
+  .item {
+    margin-left: 40px
+  }
+}
+@media only screen and (max-width: 790px){
+  .container{
+    grid-template-areas:
+    "item"
+    "form";
+  }
+  .item img{
+    margin-top: -60px;
+  }
+  .item{
+    margin-left: 130px;
+  }
+  .form{
+    margin-left: 150px;
+  }
+}
+@media only screen and (max-width: 490px){
+  .item{
+    margin-left: 70px;
+  }
+  .form{
+    margin-left: 20px;
+  }
+  .item h1{
+    font-size: 3rem;
+  }
+  .item h4{
+    font-size: 1rem;
+  }
+}
+@media only screen and (max-width: 320px){
+  .form input{
+    margin-top: 52px;
+  }
+}

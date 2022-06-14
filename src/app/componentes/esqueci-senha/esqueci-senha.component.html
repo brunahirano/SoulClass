@@ -1,0 +1,33 @@
+<!--Página esqueci a senha-->
+<div class="container">
+  <div class="item">
+    <img src="assets/img/logoazul.png">
+    <h1 class="fw-bolder">Esqueceu a Senha?</h1>
+    <h4>Não se preocupe, enviaremos um email <br>para que possa redefinir sua senha.</h4>
+    <p class="fw-bold" routerLink="/login"><i class="bi bi-chevron-compact-left"></i> Voltar para o Login</p>
+  </div>
+  <!--Input para digitar o email do usuário-->
+  <div class="form">
+    <form [formGroup]="registroForm">
+      <input type="email" class="email" placeholder="exemplo@gmail.com" formControlName="email"><br>
+      <div class="validarEmail mt-2">
+        <!--Validação de e-mail para enviar redefinição de senha-->
+        <span class="error text-danger text-center mb-4">{{erroMensagem}}</span><br>
+      </div>
+      <button type="button" (click)="senha(registroForm.value)" class="btn">Enviar</button>
+    </form>
+  </div>
+</div>
+<!--Modal de aviso com mensagem de sucesso-->
+<!-- <div *ngIf="mModal">
+  <div class="minhaModal">
+    <div class="tituloModal">
+      <h5 class="text-center">Aviso!</h5>
+    </div>
+    <h6 class="my-4 text-center">{{sucessoMensagem}}</h6>
+    <div class="buttons"> -->
+      <!--Botão ok e redirediona para a rota /login-->
+      <!-- <button class="cancela" routerLink="/login">Ok</button>
+    </div>
+  </div>
+</div> -->

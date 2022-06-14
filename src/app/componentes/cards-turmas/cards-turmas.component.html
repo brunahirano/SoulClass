@@ -1,0 +1,150 @@
+<!-- sidebar  -->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav="matSidenav">
+
+    <img class="logo mt-4 " src="../assets/img/logobranco.png" />
+
+    <div class="icon-nav ">
+      <ul class="mt-5">
+        <li>
+          <i class='bx bx-group'></i>
+          <span routerLink="/cardsTurmas">Turmas</span>
+        </li>
+        <li>
+          <i class='bx bxs-camera-movie'></i>
+          <span routerLink="/cursos">Cursos</span>
+        </li>
+      </ul>
+    </div>
+    <div class="out-container">
+      <i (click)="logout()" class='bx bx-log-out' role="button"></i>
+    </div>
+  </mat-sidenav>
+  <!-- menu mobile -->
+  <header>
+    <nav>
+      <i mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()" role="button">
+        <mat-icon *ngIf="!sidenav.opened">
+          menu
+        </mat-icon>
+        <mat-icon *ngIf="sidenav.opened">
+          close
+        </mat-icon>
+      </i>
+    </nav>
+  </header>
+
+  <!-- ****conteúdo**** -->
+  <div class="container font">
+    <div class="box-title">
+      <h2 class="mt-5 alinhamento">Turmas</h2>
+      <div class="box-btn mt-4">
+        <button (click)="openDialog(); reseteModal()" type="button"><i class='bx bx-plus'></i>Adicionar Turma</button>
+      </div>
+    </div>
+    <mat-form-field class="alinhamento">
+      <span matPrefix> </span>
+      <!--Filtro para as turmas-->
+      <input type="text" matInput placeholder="Buscar" name="search" [(ngModel)]="filterTerm">
+      <button matSuffix mat-button>
+        <mat-icon>search</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <!-- Cards das Turmas -->
+    <div class="row card-container mt-4 container">
+      <div class="col-lg-4 col-md-6 card-turmas my-4" *ngFor="let item of turmas | filter:filterTerm">
+        <mat-card class="example-card mx-auto">
+          <!--Nome da turma-->
+          <mat-card-header>
+            <mat-card-title class="mt-2">{{item.nome}}</mat-card-title>
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+              <i class='bx bx-dots-vertical-rounded font-icone'></i>
+            </button>
+            <!--Mat menu-->
+            <mat-menu #menu="matMenu">
+              <!--Listando os alunos da turma-->
+              <button mat-menu-item (click)="listarAlunosTurma(item)" title="Informações da turma">
+                <mat-icon>list</mat-icon>
+                <span>Informações da Turma</span>
+              </button>
+              <!--Botão para chamar o Modal para editar turmas-->
+              <button mat-menu-item (click)="open(modalEditar); editarTurma(item)" title="Editar turma" type="button">
+                <mat-icon>build</mat-icon>
+                <span>Editar</span>
+              </button>
+              <!--Botão para chamar o Modal para excluir turmas-->
+              <button mat-menu-item (click)="open(modalExcluir)" title="Excluir turma" type="button">
+                <mat-icon>delete</mat-icon>
+                <span>Excluir</span>
+              </button>
+            </mat-menu>
+          </mat-card-header>
+          <!--Imagem da turma-->
+          <img mat-card-image class="img-card p-1" src="{{item.foto}}" alt="Imagem logo da turma adicionada" title="Imagem turma {{item.nome}}">
+          <!--Descrição da turma-->
+          <mat-card-content>
+            <h5 class="mt-2 ml-3">
+              {{item.descricao}}
+            </h5>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Modal de confirmação para excluir turma -->
+        <ng-template #modalExcluir let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="excluir">Aviso</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Deseja realmente excluir a Turma {{item.nome}}?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-s" (click)="modal.close('Save click')">Cancelar</button>
+            <button type="button" class="btn-e" (click)="excluirTurma(item);modal.close('Save click')">Excluir</button>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de editar turma -->
+  <ng-template #modalEditar let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Editar</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form action="" [formGroup]="form">
+        <mat-form-field class="input-group mb-2">
+          <mat-label>Nome da turma</mat-label>
+          <input matInput type="text" formControlName="nome" aria-required="true">
+        </mat-form-field>
+        <mat-form-field class="input-group mb-2">
+          <mat-label>Descrição da turma</mat-label>
+          <input matInput type="text" formControlName="descricao" aria-required="true">
+        </mat-form-field>
+        <div>
+          <img src="{{valorImg}}" alt="Imagem default" class="imagem-modal">
+        </div>
+        <div *ngIf=progresso class="input-group-text">
+          <mat-progress-bar mode="indeterminate" role="status"></mat-progress-bar>
+        </div>
+        <input type="file" id="foto" formControlName="foto" (change)="carregarImg($event)" class="mb-3">
+        <br>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="mt-3 button-modal" (click)="updateTurma(); modal.dismiss('Cross click')"
+        [disabled]="!form.valid">Editar</button>
+    </div>
+  </ng-template>
+
+
+  <!-- ****/conteúdo**** -->
+</mat-sidenav-container>
+<!-- ****/sidebar**** -->

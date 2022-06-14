@@ -1,0 +1,22 @@
+<!--PÁGINA DE LOGIN-->
+<div class="container">
+  <div class="form">
+    <img src="assets/img/logoazul.png">
+    <h1 class="fw-bold">Faça seu login na Plataforma</h1>
+  </div>
+  <div class="logoLogin">
+    <div class="login-form">
+      <form [formGroup]="loginForm">
+        <input type="email" class="email" placeholder="exemplo@gmail.com" formControlName="email"><br>
+        <input type="password" class="senha" placeholder="Senha" formControlName="password">
+        <!--Esqueci a minha senha redireciona para a rota /senha-->
+        <p class="fw-bold" routerLink="/senha">Esqueci minha senha</p>
+        <div class="escsenha">
+          <!--Validação de login com mensagem de erro ou de sucesso, conforme verificção no banco de dados-->
+          <span class="error text-danger text-center mb-4">{{erroMensagem}}</span><br>
+        </div>
+        <button type="button" class="btn" (click)="login(loginForm.value)">Entrar</button>
+      </form>
+    </div>
+  </div>
+</div>

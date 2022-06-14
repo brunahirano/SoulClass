@@ -1,0 +1,106 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400, 0;600;0,700;1,200&display=swap");
+
+
+
+.mat-icon-button {
+  margin-right: 4%
+}
+
+/* Modal pra importar CSV */
+
+  .btn-csv {
+    border: none;
+    background-color: #f8c100;
+    padding: 8px;
+    color: #ffffff;
+    border-radius: 3px;
+  }
+
+/**/
+
+/* Botão de adicionar curso */
+
+  .box-btn {
+    margin-right: 3%;
+  }
+
+/**/
+
+/* Tabelas com informaçõe de alunos / cursos */
+
+  .fa-trash-alt {
+    margin-left: 10px;
+  }
+
+  .navegarCurso {
+    cursor: pointer;
+  }
+
+  th {
+    font-size: clamp(1em, 1em + 1vh, 1.2em);
+  }
+
+  td {
+    font-size: clamp(0.75em, 1em + 1vh, 1em);
+  }
+
+/**/
+
+
+/* Modal de adicionar curso */
+  .sel-curso {
+    text-align: center;
+    margin-bottom: 10px;
+    margin: 0 auto;
+  }
+
+  .sel-curso:focus {
+      box-shadow: none !important;
+  }
+/**/
+
+
+/* Responsividade */
+@media (max-width: 426px) {
+  /* icones de ações da tabela */
+  .actions {
+    margin-left: 12px;
+  }
+  .text-mobile {
+    display: none;
+  }
+  h2 {
+    font-size: 25px;
+  }
+  input {
+    zoom: 80%
+  }
+  .descricao {
+    text-align: center;
+  }
+  .mat-paginator-container {
+    flex-wrap: nowrap;
+    align-items: unset;
+    justify-content: unset;
+    background-color: #fff;
+    zoom: 70% !important;
+    width: 300px;
+  }
+
+  .fa-trash-alt {
+    margin-right: 10px;
+  }
+
+}
+
+@media(max-width: 330px) {
+  input[type=file] {
+    zoom: 70%;
+    margin-left: -15px
+  }
+
+  table {
+    zoom: 80%;
+  }
+
+}

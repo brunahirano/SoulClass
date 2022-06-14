@@ -1,0 +1,116 @@
+:root{
+  --blue: #3cb4c4;
+  --yellow: #F2CB05;
+  --white: #F2F2F2;
+  --white2: hsl(0, 0%, 90%);
+}
+.container{
+  border: 0px solid black;
+  max-width: 1200px;
+  margin: 150px auto 0px;
+  display: grid;
+  grid-template-areas:
+  "logoLogin form";
+
+}
+input {
+  margin-bottom: 1px;
+}
+.logoLogin{
+  background-color: var(--white);
+  max-width: 500px;
+  min-width: 400px;
+  height: 500px;
+  border-radius: 10px;
+  grid-area: "logoLogin";
+}
+.form{
+  max-width: 600px;
+  min-width: 300px;
+  border-radius: 10px;
+  height: 200px;
+  margin-top: 120px;
+  grid-area: "form";
+  grid-row: form;
+}
+.logoLogin .login-form .email{
+  width: 345.98px;
+  height: 54.73px;
+  margin-left: 80px;
+  margin-top: 52px;
+}
+.logoLogin .login-form .senha{
+
+  width: 345.98px;
+  height: 54.73px;
+  margin-left: 80px;
+  margin-top: 20px;
+}
+form p{
+  margin-top: 20px;
+  margin-left: 80px;
+  color: var(--yellow);
+  cursor: pointer;
+}
+form button{
+  margin-top: 30px;
+  margin-left: 80px;
+  height: 54.73px;
+  width: 345.98px;
+  background-color: #21a7d0;
+  color: #F2F2F2;
+}
+.login-cad{
+  margin-top: 20px;
+  margin-left: 115px;
+
+}
+.login-cad span{
+  color: var(--yellow);
+  cursor: pointer;
+}
+.form h1{
+  font-size: 50px;
+}
+.form h1, img{
+  margin-left: 30px;
+}
+.escsenha{
+  margin-left:80px;
+}
+@media (max-width: 1190px){
+  .form{
+    width: 200px;
+  }
+}
+@media (max-width: 1010px){
+  .container{
+    grid-template-areas:
+    "form"
+    "logoLogin";
+    margin-top: -70px;
+  }
+  .logoLogin{
+    margin-top: 60px;
+    margin-left: 110px;
+  }
+  .form{
+    width: 450px;
+    margin-left: 155px;
+  }
+  .form h1{
+    margin-top: 20px;
+  }
+}
+@media (max-width:450px){
+  .logoLogin{
+    margin-left: -10px;
+  }
+  .form{
+    margin-left: 20px;
+  }
+  .logoLogin .login-form .email, .logoLogin .login-form .senha{
+    margin-left: 73px;
+    margin-top: 50px;
+  }
+}
